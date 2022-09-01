@@ -1,0 +1,13 @@
+{
+  "name": "mk64-online",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.ts",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {},
+  "core": "*"
+}

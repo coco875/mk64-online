@@ -1,0 +1,4 @@
+crc 00000000-00000000-0:00
+gn None
+crc 3E5055B6-2E92DA52-C:45
+gn MARIOKART64 (unknown rom)

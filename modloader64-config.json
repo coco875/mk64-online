@@ -1,0 +1,28 @@
+{
+    "ModLoader64": {
+      "rom": "Mario Kart 64 (USA).n64",
+      "patch": "",
+      "isServer": true,
+      "isClient": true,
+      "supportedConsoles": [
+        "N64"
+      ],
+      "selectedConsole": "N64",
+      "coreOverride": "",
+      "disableVIUpdates": false
+    },
+    "NetworkEngine.Client": {
+      "isSinglePlayer": true,
+      "forceServerOverride": false,
+      "ip": "127.0.0.1",
+      "port": 8082,
+      "lobby": "brother-dependable-85",
+      "nickname": "Player",
+      "password": ""
+    },
+    "NetworkEngine.Server": {
+      "port": 8082,
+      "udpPort": 8082,
+      "patchSizeLimitMB": 10
+    }
+  }

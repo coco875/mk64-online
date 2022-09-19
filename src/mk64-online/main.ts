@@ -15,6 +15,14 @@ class SomeDetailedPacket extends Packet {
     }
 }
 
+function pathcher(address: Array<number>, replace: Array<number>, modloader) {
+    for (let i in address) {
+        for (let j in replace) {
+            modloader.emulator.rdramWrite32(address[i]+(Number(j)*0x4), replace[j])
+        }
+    }
+}
+
 export class PluginSample implements IPlugin {
     ModLoader = {} as IModLoaderAPI
     name = "PluginSample"
@@ -25,7 +33,7 @@ export class PluginSample implements IPlugin {
 
     asmController = 0
 
-    IAAdress = []
+    IAAdress:Array<number> = []
 
     sampleWindowOpen: bool_ref = [true]
 
@@ -64,7 +72,7 @@ export class PluginSample implements IPlugin {
         if (!this.start){
             this.start = true
             this.asmController = this.ModLoader.emulator.rdramRead32(0x8000289C)
-            for (var i = 0;i<8;i++) {
+            for (let i = 0;i<8;i++) {
                 this.IAAdress.push(this.ModLoader.emulator.rdramRead32(0x800DC4DC+(0x4*i)))
             }
             console.log(this.IAAdress)
@@ -112,27 +120,22 @@ export class PluginSample implements IPlugin {
     patchMenu() {
         let patch = [0x00010000, 0x0B00D200, 0x00400012, 0x00000041, 0x00000000, 0x00010000, 0x0B00C700, 0x00400012, 0x00000053, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000] // ui of course vs and battle mode
         let adress = [0x8019BF58, 0x8019BFA8] // address for one and two player
-        console.log(this.ModLoader.emulator.rdramRead32(0x8019BF58))
+        
         for (let i in adress) {
             adress[i] += 0x14
         }
-        for (let i in adress) {
-            for (let j in patch) {
-                this.ModLoader.emulator.rdramWrite32(adress[i]+(Number(j)*0x4), patch[j])
-            }
-        }
+        pathcher(adress, patch, this.ModLoader)
 
         // fix game mode
         patch = [0x00000002, 0x00000003] //the mod 4 is not real but replace after by the id of grand prix and 3 is for battle
         adress = [0x800F2B7C, 0x800F2B88, 0x800F2B94, 0x800F2BA0]
 
-        for (let i in adress) {
-            for (let j in patch) {
-                this.ModLoader.emulator.rdramWrite32(adress[i]+(Number(j)*0x4), patch[j])
-            }
-        }
+        pathcher(adress, patch, this.ModLoader)
+
         this.ModLoader.emulator.rdramWrite32(0x8003C23C, 0x0C00F096) // init player in versus mode
-        this.ModLoader.emulator.rdramWrite32(0x8003a564, 0x240B0000)
+        this.ModLoader.emulator.rdramWrite32(0x8003a564, 0x240B0000) // don't show menu
+
+        this.ModLoader.emulator.rdramWrite32(0x800382EC,0x10400064)
 
         this.ModLoader.emulator.invalidateCachedCode() // don't forget this to reload code
     }
